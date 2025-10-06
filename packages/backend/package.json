@@ -3,18 +3,20 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev",
-    "setup": "convex dev --until-success"
+    "deploy": "convex deploy",
+    "setup": "convex dev --until-success",
+    "start": "convex dev"
   },
   "exports": {
-    "./convex/*": "./convex/*.ts"
+    "./convex": "./convex/*.ts"
   },
   "devDependencies": {
-    "@types/minimatch": "^6.0.0",
     "@types/node": "^20.19.9",
     "@workspace/typescript-config": "workspace:*",
+    "depcheck": "^1.4.7",
     "typescript": "latest"
   },
   "dependencies": {
-    "convex": "^1.27.3"
+    "convex": "^1.26.2"
   }
 }
