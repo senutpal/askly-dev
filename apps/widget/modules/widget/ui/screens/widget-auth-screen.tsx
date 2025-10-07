@@ -67,7 +67,6 @@ export default function WidgetAuthScreen() {
 
     try {
         console.log("Creating contact session...");
-        
       const contactSessionId = await createContactSession({
         ...values,
         organizationId,

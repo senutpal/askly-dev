@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai";
 import { WidgetErrorScreen } from "@/modules/widget/ui/screens/widget-error-screen";
 import { WidgetLoadingScreen } from "@/modules/widget/ui/screens/widget-loading-screen";
 import { WidgetSelectionScreen } from "../screens/widget-selection-screen";
+import WidgetChatScreen from "../screens/widget-chat-screen";
 
 interface Props {
   organizationId: string;
@@ -21,7 +22,7 @@ export const WidgetView = ({ organizationId }: Props) => {
     // voice: "<p>TODO: Voice</p>",
     auth: <WidgetAuthScreen />,
     // inbox: <WidgetInboxScreen />,
-    // chat: <WidgetChatScreen />,
+    chat: <WidgetChatScreen />,
     // contact: <WidgetContactScreen />,
   };
 
