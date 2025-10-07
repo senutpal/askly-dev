@@ -13,17 +13,24 @@ import {
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
 import { useMutation } from "convex/react";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { contactSessionIdAtomFamily, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.email("Invalid email address"),
 });
 
-const organizationId = "12345";
 
 export default function WidgetAuthScreen() {
+
+  const setScreen = useSetAtom(screenAtom);
+  const organizationId = useAtomValue(organizationIdAtom);
+  const setContactSessionId = useSetAtom(
+    contactSessionIdAtomFamily(organizationId || "")
+  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +43,7 @@ export default function WidgetAuthScreen() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!organizationId) {
-      console.warn("No organisationId, skipping");
+      console.warn("No organizationId, skipping");
       return;
     }
 
@@ -67,8 +74,8 @@ export default function WidgetAuthScreen() {
         metadata,
       });
 
-    //   setContactSessionId(contactSessionId);
-    //   setScreen("selection");
+      setContactSessionId(contactSessionId);
+      setScreen("selection");
     } catch (err) {
       console.error("Failed to create contact session:", err);
     }
