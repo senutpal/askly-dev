@@ -25,7 +25,6 @@ const formSchema = z.object({
 
 
 export default function WidgetAuthScreen() {
-
   const setScreen = useSetAtom(screenAtom);
   const organizationId = useAtomValue(organizationIdAtom);
   const setContactSessionId = useSetAtom(

@@ -1,4 +1,5 @@
 import { Button } from "@workspace/ui/components/button";
+import { useInfiniteScroll } from "@workspace/ui/hooks/use-infinite-scroll";
 import { WidgetHeader } from "../components/widget-header";
 import { ArrowLeft, Menu } from "lucide-react";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -31,6 +32,8 @@ import {
   AIInputToolbar,
   AIInputTools,
 } from "@workspace/ui/components/ai/input";
+import { InfinteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
+import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
 
 const formSchema = z.object({
   message: z.string().min(1, "Message is required"),
@@ -65,6 +68,13 @@ export default function WidgetChatScreen() {
     { initialNumItems: 10 }
   );
 
+  const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =
+    useInfiniteScroll({
+      status: messages.status,
+      loadMore: messages.loadMore,
+      loadSize: 10,
+    });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -75,7 +85,7 @@ export default function WidgetChatScreen() {
 
   const onBack = () => {
     setConversationId(null);
-    setScreen("inbox");
+    setScreen("selection");
   };
 
   const createMessage = useAction(api.public.messages.create);
@@ -83,13 +93,12 @@ export default function WidgetChatScreen() {
     if (!conversation || !contactSessionId) {
       return;
     }
-
+    form.reset();
     await createMessage({
       threadId: conversation.threadId,
       prompt: values.message,
       contactSessionId,
     });
-    form.reset();
   };
 
   return (
@@ -109,15 +118,47 @@ export default function WidgetChatScreen() {
       </WidgetHeader>
       <AIConversation>
         <AIConversationContent>
+          <InfinteScrollTrigger
+            canLoadMore={canLoadMore}
+            isLoadingMore={isLoadingMore}
+            onLoadMore={handleLoadMore}
+            ref={topElementRef}
+          />
           {toUIMessages(messages.results ?? [])?.map((message) => {
+            const hasText = !!(message.text && message.text.trim().length > 0);
+            const isLoading =
+              message.role === "assistant" &&
+              !hasText &&
+              (message.status === "streaming" || message.status === "pending");
+            const shouldShow = hasText || isLoading;
+            if (!shouldShow) return null;
+
             return (
               <AIMessage
                 from={message.role === "user" ? "user" : "assistant"}
                 key={message.id}
               >
                 <AIMessageContent>
-                  <AIResponse>{message.text}</AIResponse>
+                  {isLoading ? (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.3s]" />
+                        <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.15s]" />
+                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" />
+                      </div>
+                      <span>AI is thinking...</span>
+                    </div>
+                  ) : (
+                    <AIResponse>{message.text}</AIResponse>
+                  )}
                 </AIMessageContent>
+                {message.role === "assistant" && (
+                  <DicebearAvatar
+                    imageUrl="/logo.svg"
+                    seed="assistant"
+                    size={32}
+                  />
+                )}
               </AIMessage>
             );
           })}

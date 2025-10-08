@@ -34,12 +34,6 @@ export const WidgetLoadingScreen = ({
   const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(organizationId || "")
   );
-  useEffect(() => {
-    console.log("Organization ID:", organizationId);
-    console.log("Contact Session Atom Value:", contactSessionId);
-  }, [organizationId, contactSessionId]);
-  // ...existing code...
-  console.log(contactSessionId);
 
   const validateOrganization = useAction(api.public.organizations.validate);
 
@@ -89,7 +83,6 @@ export const WidgetLoadingScreen = ({
     if (step !== "session") {
       return;
     }
-    console.log(validateContactSession);
 
     setLoadingMessage("Finding contact Session Id");
     if (!contactSessionId) {
@@ -140,10 +133,8 @@ export const WidgetLoadingScreen = ({
     }
 
     setLoadingMessage("Finding contact Session Id");
-    console.log("Contact Session ID:", contactSessionId); // Add debug logging
 
     if (!contactSessionId) {
-      console.log("No contact session ID found, moving to settings step");
       setSessionValid(false);
       setStep("settings");
       return;
@@ -154,7 +145,6 @@ export const WidgetLoadingScreen = ({
       contactSessionId,
     })
       .then((result) => {
-        console.log("Session validation result:", result);
         setSessionValid(result.valid);
         setStep("settings");
       })

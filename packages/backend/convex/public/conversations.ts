@@ -1,6 +1,8 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "../_generated/server";
 import { supportAgent } from "../system/ai/agents/supportAgent";
+import { components } from "../_generated/api";
+import { saveMessage } from "@convex-dev/agent";
 // import { supportAgent } from "../system/ai/agents/supportAgent";
 // import { MessageDoc, saveMessage } from "@convex-dev/agent";
 // import { components } from "../_generated/api";
@@ -126,14 +128,13 @@ export const create = mutation({
       userId: args.organizationId,
     });
 
-    // await saveMessage(ctx, components.agent, {
-    //   threadId,
-    //   message: {
-    //     role: "assistant",
-    //     content:
-    //       widgetSettings?.greetMessage || "Hello, how can I help you today ?",
-    //   },
-    // });
+    await saveMessage(ctx, components.agent, {
+      threadId,
+      message: {
+        role: "assistant",
+        content: "Hello, how can I help you today ?",
+      },
+    });
 
     const conversationId = await ctx.db.insert("conversations", {
       contactSessionId: session._id,
