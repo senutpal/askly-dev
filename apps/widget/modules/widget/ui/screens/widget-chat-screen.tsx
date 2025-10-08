@@ -32,7 +32,7 @@ import {
   AIInputToolbar,
   AIInputTools,
 } from "@workspace/ui/components/ai/input";
-import { InfinteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
+import { InfiniteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
 import { DicebearAvatar } from "@workspace/ui/components/dicebear-avatar";
 
 const formSchema = z.object({
@@ -118,7 +118,7 @@ export default function WidgetChatScreen() {
       </WidgetHeader>
       <AIConversation>
         <AIConversationContent>
-          <InfinteScrollTrigger
+          <InfiniteScrollTrigger
             canLoadMore={canLoadMore}
             isLoadingMore={isLoadingMore}
             onLoadMore={handleLoadMore}
