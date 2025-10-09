@@ -186,7 +186,7 @@ export const ConversationIdView = ({
                 {message.role === "user" && (
                   <DicebearAvatar
                     seed={conversation?.contactSessionId ?? "user"}
-                    size={32}
+                    size={36}
                   />
                 )}
               </AIMessage>
