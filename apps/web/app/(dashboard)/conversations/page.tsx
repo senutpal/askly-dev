@@ -1,7 +1,6 @@
-import React from 'react'
+import { ConversationsView } from "@/modules/dashboard/ui/views/conversations-view";
+import React from "react";
 
 export default function page() {
-  return (
-    <div>Converastions</div>
-  )
+  return <ConversationsView />;
 }

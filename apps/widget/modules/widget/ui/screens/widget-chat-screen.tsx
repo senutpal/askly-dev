@@ -65,7 +65,7 @@ export default function WidgetChatScreen() {
           contactSessionId,
         }
       : "skip",
-    { initialNumItems: 10 }
+    { initialNumItems: 20 }
   );
 
   const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =

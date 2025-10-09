@@ -41,7 +41,7 @@ export const ConversationsPanel = () => {
       status: statusFilter === "all" ? undefined : statusFilter,
     },
     {
-      initialNumItems: 10,
+      initialNumItems: 20,
     }
   );
 
@@ -70,7 +70,7 @@ export const ConversationsPanel = () => {
           <SelectTrigger className="h-8 border-none px-1.5 shadow-none ring-0 hover:bg-accent hover:text-accent-foreground focus-visible:ring-0">
             <SelectValue placeholder="Filter conversations" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="left-8 top-2 shadow-2xl">
             <SelectItem value="all">
               <div className="flex items-center gap-2">
                 <ListIcon className="size-4" />

@@ -30,7 +30,7 @@ export const WidgetInboxScreen = () => {
   const conversations = usePaginatedQuery(
     api.public.conversations.getMany,
     contactSessionId ? { contactSessionId } : "skip",
-    { initialNumItems: 10 }
+    { initialNumItems: 20 }
   );
   const { topElementRef, handleLoadMore, canLoadMore, isLoadingMore } =
     useInfiniteScroll({
