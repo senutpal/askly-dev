@@ -116,7 +116,7 @@ export default function WidgetChatScreen() {
           </Button>
         </div>
       </WidgetHeader>
-      <AIConversation>
+      <AIConversation className="min-h-[calc(100vh-180px)] max-h-[calc(100vh-180px)]">
         <AIConversationContent>
           <InfiniteScrollTrigger
             canLoadMore={canLoadMore}

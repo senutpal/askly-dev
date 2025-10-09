@@ -29,13 +29,23 @@ export const search = createTool({
       return "Conversation not found";
     }
 
-    const orgId = conversation.organisationId;
+    const orgId = conversation.organizationId;
 
     const searchResult = await rag.search(ctx, {
       namespace: orgId,
       query: args.query,
       limit: 5,
     });
+
+    // if (searchResult.entries.length === 0) {
+    //   const emptyMessage =
+    //     "I couldn't find specific information in the official documents. Would you like me to connect you with a human staff member who can help?";
+    //   await supportAgent.saveMessage(ctx, {
+    //     threadId: ctx.threadId,
+    //     message: { role: "assistant", content: emptyMessage },
+    //   });
+    //   return emptyMessage;
+    // }
 
     const contextText = `Found results in: ${searchResult.entries
       .map((e) => e.title || null)
