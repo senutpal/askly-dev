@@ -2,6 +2,7 @@ import { DM_Sans } from "next/font/google";
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@workspace/ui/components/sonner";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -18,7 +19,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} font-sans antialiased`}>
         <ClerkProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            <Toaster />
+            {children}
+          </Providers>
         </ClerkProvider>
       </body>
     </html>
