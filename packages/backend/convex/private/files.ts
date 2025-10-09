@@ -47,7 +47,7 @@ export const deleteFile = mutation({
 
     if (!namespace) {
       throw new ConvexError({
-        code: " UNAUTHORIZED",
+        code: "UNAUTHORIZED",
         message: "Invalid Namespace",
       });
     }
@@ -132,13 +132,26 @@ export const addFile = action({
       contentHash: await contentHashFromArrayBuffer(bytes),
     });
 
+    let url: string | null = null;
+
     if (!created) {
       console.debug("Entry already exists, skipping upload metadata");
       await ctx.storage.delete(storageId);
+
+      const existingEntry = await rag.getEntry(ctx, { entryId });
+      const existingStorageId = (
+        existingEntry?.metadata as EntryMetadata | undefined
+      )?.storageId;
+
+      url = existingStorageId
+        ? await ctx.storage.getUrl(existingStorageId)
+        : null;
+    } else {
+      url = await ctx.storage.getUrl(storageId);
     }
 
     return {
-      url: await ctx.storage.getUrl(storageId),
+      url,
       entryId,
     };
   },
