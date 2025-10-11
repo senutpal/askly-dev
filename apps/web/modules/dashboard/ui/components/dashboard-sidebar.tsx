@@ -41,8 +41,8 @@ const customerSupportItems = [
 
 const configurationItems = [
   {
-    title: "Widget Customisation",
-    url: "/customisation",
+    title: "Widget Customization",
+    url: "/customization",
     icon: PaletteIcon,
   },
   {
