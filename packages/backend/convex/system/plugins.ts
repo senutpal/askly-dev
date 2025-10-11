@@ -7,18 +7,18 @@ export const upsert = internalMutation({
     organizationId: v.string(),
     secretContent: v.string(),
     iv: v.string(),
-    authTag: v.string(), 
+    authTag: v.string(),
   },
   async handler(ctx, args) {
-    const existing = await ctx.db
+    const existingPlugin = await ctx.db
       .query("plugins")
       .withIndex("by_organization_id_and_service", (q) =>
         q.eq("organizationId", args.organizationId).eq("service", args.service)
       )
       .first();
 
-    if (existing) {
-      await ctx.db.patch(existing._id, {
+    if (existingPlugin) {
+      await ctx.db.patch(existingPlugin._id, {
         secretContent: args.secretContent,
         iv: args.iv,
         authTag: args.authTag,
@@ -35,7 +35,7 @@ export const upsert = internalMutation({
   },
 });
 
-export const getByOrganisationIdAndService = internalQuery({
+export const getByOrganizationIdAndService = internalQuery({
   args: {
     service: v.union(v.literal("vapi")),
     organizationId: v.string(),

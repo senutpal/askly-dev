@@ -27,14 +27,14 @@ export const upsert = internalAction({
   },
 });
 
-export const getByOrganisationIdAndService = internalAction({
+export const getByOrganizationIdAndService = internalAction({
   args: {
     organizationId: v.string(),
     service: v.union(v.literal("vapi")),
   },
   handler: async (ctx, args) => {
     const encrypted = await ctx.runQuery(
-      internal.system.plugins.getByOrganisationIdAndService,
+      internal.system.plugins.getByOrganizationIdAndService,
       {
         service: args.service,
         organizationId: args.organizationId,

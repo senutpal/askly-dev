@@ -37,7 +37,7 @@ export const deleteFile = mutation({
     if (!orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "Organisation Not Found",
+        message: "Organization Not Found",
       });
     }
 
@@ -66,7 +66,7 @@ export const deleteFile = mutation({
     if (entry.metadata?.uploadedBy !== orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "Invalid Organisation",
+        message: "Invalid Organization",
       });
     }
 
@@ -101,7 +101,7 @@ export const addFile = action({
     if (!orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "Organisation Not Found",
+        message: "Organization Not Found",
       });
     }
 
@@ -176,7 +176,7 @@ export const list = query({
     if (!orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "Organisation Not Found",
+        message: "Organization Not Found",
       });
     }
 
@@ -223,7 +223,7 @@ type EntryMetadata = {
   storageId: Id<"_storage">;
   uploadedBy: string;
   filename: string;
-  category: string | "null";
+  category: string | null;
 };
 
 async function convertEntryToPublicFile(

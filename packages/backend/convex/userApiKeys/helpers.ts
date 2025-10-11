@@ -3,6 +3,9 @@ import crypto from "crypto";
 
 const ALGORITHM = "aes-256-gcm";
 const MASTER_KEY = process.env.MASTER_KEY as string;
+if (!MASTER_KEY) {
+  throw new Error("MASTER_KEY environment variable is required");
+}
 const IV_LENGTH = 16;
 
 function deriveKey(key: string): Buffer {
@@ -12,14 +15,12 @@ function deriveKey(key: string): Buffer {
 export function encrypt(text: string) {
   const iv = crypto.randomBytes(IV_LENGTH);
   const key = deriveKey(MASTER_KEY);
-  console.log(key);
 
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
   let encrypted = cipher.update(text, "utf8", "hex");
   encrypted += cipher.final("hex");
 
   const authTag = cipher.getAuthTag();
-  console.log(encrypted);
 
   return {
     iv: iv.toString("hex"),

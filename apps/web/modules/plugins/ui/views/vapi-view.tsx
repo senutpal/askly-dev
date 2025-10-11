@@ -25,6 +25,7 @@ import {
 import { Label } from "@workspace/ui/components/label";
 import { Input } from "@workspace/ui/components/input";
 import { Button } from "@workspace/ui/components/button";
+import { VapiConnectedView } from "../components/vapi-connected-view";
 const vapiFeatures: Feature[] = [
   {
     icon: Globe2,
@@ -34,7 +35,7 @@ const vapiFeatures: Feature[] = [
   {
     icon: Phone,
     label: "Phone Numbers",
-    description: "Get dedicated buisness lines",
+    description: "Get dedicated business lines",
   },
   {
     icon: PhoneCall,
@@ -123,7 +124,7 @@ const VapiPluginForm = ({
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Your Public API Key"
+                      placeholder="Your Private API Key"
                       type="password"
                     />
                   </FormControl>
@@ -142,6 +143,53 @@ const VapiPluginForm = ({
   );
 };
 
+const VapiPluginRemoveForm = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}) => {
+  const removePlugin = useMutation(api.private.plugins.remove);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      await removePlugin({
+        service: "vapi",
+      });
+      setOpen(false);
+      toast.success("Vapi Plugin Removed");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  return (
+    <Dialog onOpenChange={setOpen} open={open}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Disable Vapi</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>
+          Are you sure you want to disconnect the Vapi plugin ?
+        </DialogDescription>
+        <DialogFooter>
+          <Button
+            onClick={onSubmit}
+            variant="destructive"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Disconnecting..." : "Disconnect"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
 export const VapiView = () => {
   const vapiPlugin = useQuery(api.private.plugins.getOne, {
     service: "vapi",
@@ -160,6 +208,7 @@ export const VapiView = () => {
   return (
     <>
       <VapiPluginForm open={connectOpen} setOpen={setConnectOpen} />
+      <VapiPluginRemoveForm open={removeOpen} setOpen={setRemoveOpen} />
       <div className="flex flex-col  min-h-screen bg-muted p-8">
         <div className="mx-auto w-full max-w-screen-md">
           <div className="space-y-2">
@@ -168,7 +217,7 @@ export const VapiView = () => {
           </div>
           <div className="mt-8">
             {vapiPlugin ? (
-              <p>Connected</p>
+              <VapiConnectedView onDisconnect={handleSubmit} />
             ) : (
               <PluginCard
                 onSubmit={handleSubmit}
