@@ -96,122 +96,125 @@ export const CustomizationForm = ({
     }
   };
   return (
-    <Form {...form}>
-      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>General Chat Settings</CardTitle>
-            <CardDescription>
-              Configure basic chat widget behaviour and messages
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <FormField
-              control={form.control}
-              name="greetMessage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Greeting Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Welcome message shown when chat opens"
-                      rows={3}
-                    />
-                  </FormControl>
-                  <FormDescription className="text-xs ">
-                    The first message students see when they open the chat
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Separator />
-            <div className="space-y-4">
-              <div>
-                <h3
-                  className="mb-2
-                 text-sm font-medium"
-                >
-                  Default Suggestions
-                </h3>
-                <p className="mb-5 text-sm text-muted-foreground">
-                  Quick reply to suggestions shown to students to help guide the
-                  conversation
-                </p>
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="defaultSuggestions.suggestion1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Suggestion 1</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="e.g. How do get started "
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="defaultSuggestions.suggestion2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Suggestion 2</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="e.g. What are your pricing plans ?"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="defaultSuggestions.suggestion3"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Suggestion 3</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="e.g. I need help with my account"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        {hasVapiPlugin && (
+    <>
+      <Form {...form}>
+        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Card>
             <CardHeader>
-              <CardTitle>Voice Assistant Settings</CardTitle>
+              <CardTitle>General Chat Settings</CardTitle>
               <CardDescription>
-                Configure Voice Calling Features powered by Vapi
+                Configure basic chat widget behaviour and messages
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <VapiFormField form={form} />
+              <FormField
+                control={form.control}
+                name="greetMessage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Greeting Message</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="Welcome message shown when chat opens"
+                        rows={3}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs ">
+                      The first message students see when they open the chat
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Separator />
+              <div className="space-y-4">
+                <div>
+                  <h3
+                    className="mb-2
+                 text-sm font-medium"
+                  >
+                    Default Suggestions
+                  </h3>
+                  <p className="mb-5 text-sm text-muted-foreground">
+                    Quick reply to suggestions shown to students to help guide
+                    the conversation
+                  </p>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="defaultSuggestions.suggestion1"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Suggestion 1</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="e.g. How do get started "
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="defaultSuggestions.suggestion2"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Suggestion 2</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="e.g. What are your pricing plans ?"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="defaultSuggestions.suggestion3"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Suggestion 3</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="e.g. I need help with my account"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        )}
-        <div className="flex justify-end">
-          <Button disabled={form.formState.isSubmitting} type="submit">
-            Save Settings
-          </Button>
-        </div>
-      </form>
-    </Form>
+          {hasVapiPlugin && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Voice Assistant Settings</CardTitle>
+                <CardDescription>
+                  Configure Voice Calling features powered by Vapi
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <VapiFormField form={form} />
+              </CardContent>
+            </Card>
+          )}
+          <div className="flex justify-end">
+            <Button disabled={form.formState.isSubmitting} type="submit">
+              Save Settings
+            </Button>
+          </div>
+        </form>
+      </Form>
+      <div id="bottom"></div>
+    </>
   );
 };

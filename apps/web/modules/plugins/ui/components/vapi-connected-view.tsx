@@ -68,7 +68,7 @@ export const VapiConnectedView = ({ onDisconnect }: VapiConnectedViewProps) => {
               </div>
             </div>
             <Button asChild>
-              <Link href="/customization">
+              <Link href="/customization#bottom">
                 <Settings />
                 Configure
               </Link>

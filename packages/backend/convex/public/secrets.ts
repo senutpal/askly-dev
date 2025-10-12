@@ -13,7 +13,7 @@ export const getVapiSecrets = action({
     )) as { privateApiKey: string; publicApiKey: string } | null;
 
     if (!plugin) {
-      throw new ConvexError({ code: "NOT FOUND", message: "Plugin Not Found" });
+      throw new ConvexError({ code: "NOT_FOUND", message: "Plugin Not Found" });
     }
 
     const { privateApiKey, publicApiKey } = plugin;

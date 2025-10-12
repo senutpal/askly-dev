@@ -17,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} font-sans antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="w-screen h-screen">{children}</div>
+        </Providers>
       </body>
     </html>
   );

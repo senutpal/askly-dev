@@ -1,6 +1,5 @@
 import { FilesView } from "@/modules/files/ui/views/files-view";
-import React from "react";
 
-export default function () {
+export default function Page() {
   return <FilesView />;
 }
