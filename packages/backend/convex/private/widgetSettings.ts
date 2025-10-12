@@ -29,7 +29,7 @@ export const upsert = mutation({
     if (!orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "organization Not Found",
+        message: "Organization Not Found",
       });
     }
 
@@ -44,16 +44,16 @@ export const upsert = mutation({
         defaultSuggestions: args.defaultSuggestions,
         vapiSettings: args.vapiSettings,
       });
+      return await ctx.db.get(existingWidgetSettings._id);
     } else {
-      await ctx.db.insert("widgetSettings", {
+      const newId = await ctx.db.insert("widgetSettings", {
         organizationId: orgId,
         greetMessage: args.greetMessage,
         defaultSuggestions: args.defaultSuggestions,
         vapiSettings: args.vapiSettings,
       });
+      return await ctx.db.get(newId);
     }
-
-    return existingWidgetSettings;
   },
 });
 
@@ -74,7 +74,7 @@ export const getOne = query({
     if (!orgId) {
       throw new ConvexError({
         code: "UNAUTHORIZED",
-        message: "organization Not Found",
+        message: "Organization Not Found",
       });
     }
 

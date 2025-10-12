@@ -13,6 +13,7 @@ import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
+import { widgetSettingsAtom } from "../../atoms/widget-atoms";
 
 type InitStep = "storage" | "org" | "session" | "settings" | "vapi" | "done";
 
@@ -28,7 +29,7 @@ export const WidgetLoadingScreen = ({
   const loadingMessage = useAtomValue(loadingMessageAtom);
   const setLoadingMessage = useSetAtom(loadingMessageAtom);
   const setScreen = useSetAtom(screenAtom);
-  // const setWidgetSettings = useSetAtom(widgetSettingsAtom);
+  const setWidgetSettings = useSetAtom(widgetSettingsAtom);
 
   // ...existing code...
   const contactSessionId = useAtomValue(
@@ -104,14 +105,14 @@ export const WidgetLoadingScreen = ({
       });
   }, [step, contactSessionId, validateContactSession, setLoadingMessage]);
 
-  // const widgetSettings = useQuery(
-  //   api.public.widgetSettings.getByorganizationId,
-  //   organizationId
-  //     ? {
-  //         organizationId,
-  //       }
-  //     : "skip"
-  // );
+  const widgetSettings = useQuery(
+    api.public.widgetSettings.getByOrganizationId,
+    organizationId
+      ? {
+          organizationId,
+        }
+      : "skip"
+  );
 
   useEffect(() => {
     if (step !== "settings") {
@@ -119,13 +120,12 @@ export const WidgetLoadingScreen = ({
     }
 
     setLoadingMessage("Loading Widget Settings");
-    setStep("done")
 
-    // if (widgetSettings !== undefined) {
-    //   setWidgetSettings(widgetSettings);
-    //   setStep("done");
-    // }
-  }, [step, setStep,  setLoadingMessage]);
+    if (widgetSettings !== undefined) {
+      setWidgetSettings(widgetSettings);
+      setStep("done");
+    }
+  }, [step, widgetSettings, setWidgetSettings, setLoadingMessage]);
 
   useEffect(() => {
     if (step !== "session") {
