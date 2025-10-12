@@ -1,5 +1,7 @@
 import Vapi from "@vapi-ai/web";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
+import { vapiSecretsAtom, widgetSettingsAtom } from "../atoms/widget-atoms";
 
 interface TranscriptMessage {
   role: "user" | "assistant";
@@ -7,6 +9,8 @@ interface TranscriptMessage {
 }
 
 export const useVapi = () => {
+  const vapiSecrets = useAtomValue(vapiSecretsAtom);
+  const widgetSettings = useAtomValue(widgetSettingsAtom);
   const [vapi, setVapi] = useState<Vapi | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -15,12 +19,10 @@ export const useVapi = () => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_VAPI_API_KEY;
-    if (!apiKey) {
-      console.error("VAPI_API_KEY is not configured");
+    if (!vapiSecrets) {
       return;
     }
-    const vapiInstance = new Vapi(apiKey);
+    const vapiInstance = new Vapi(vapiSecrets.publicApiKey);
     setVapi(vapiInstance);
     vapiInstance.on("call-start", () => {
       setIsConnected(true);
@@ -59,17 +61,14 @@ export const useVapi = () => {
     return () => {
       vapiInstance?.stop();
     };
-  }, []);
+  }, [vapiSecrets]);
   const startCall = () => {
+    if (!vapiSecrets || !widgetSettings?.vapiSettings?.assistantId) {
+      return;
+    }
     setIsConnecting(true);
     if (vapi) {
-      const assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID;
-      if (!assistantId) {
-        console.error("VAPI_ASSISTANT_ID is not configured");
-        setIsConnecting(false);
-        return;
-      }
-      vapi.start(assistantId);
+      vapi.start(widgetSettings.vapiSettings.assistantId);
     }
   };
 

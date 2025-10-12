@@ -7,6 +7,7 @@ import {
   loadingMessageAtom,
   organizationIdAtom,
   screenAtom,
+  vapiSecretsAtom,
 } from "@/modules/widget/atoms/widget-atoms";
 import { WidgetHeader } from "@/modules/widget/ui/components/widget-header";
 import { LoaderIcon } from "lucide-react";
@@ -30,8 +31,7 @@ export const WidgetLoadingScreen = ({
   const setLoadingMessage = useSetAtom(loadingMessageAtom);
   const setScreen = useSetAtom(screenAtom);
   const setWidgetSettings = useSetAtom(widgetSettingsAtom);
-
-  // ...existing code...
+  const setVapiSecrets = useSetAtom(vapiSecretsAtom);
   const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(organizationId || "")
   );
@@ -123,37 +123,41 @@ export const WidgetLoadingScreen = ({
 
     if (widgetSettings !== undefined) {
       setWidgetSettings(widgetSettings);
-      setStep("done");
+      setStep("vapi");
     }
   }, [step, widgetSettings, setWidgetSettings, setLoadingMessage]);
 
+  const getVapiSecrets = useAction(api.public.secrets.getVapiSecrets);
+
   useEffect(() => {
-    if (step !== "session") {
+    if (step !== "vapi") {
       return;
     }
-
-    setLoadingMessage("Finding contact Session Id");
-
-    if (!contactSessionId) {
-      setSessionValid(false);
-      setStep("settings");
+    if (!organizationId) {
+      setErrorMessage("Organization ID is required");
+      setScreen("error");
       return;
     }
-
-    setLoadingMessage("Validating Session");
-    validateContactSession({
-      contactSessionId,
-    })
-      .then((result) => {
-        setSessionValid(result.valid);
-        setStep("settings");
+    setLoadingMessage("Loading Voice Features");
+    getVapiSecrets({ organizationId })
+      .then((secrets) => {
+        setVapiSecrets(secrets);
+        setStep("done");
       })
-      .catch((error) => {
-        console.error("Session validation error:", error);
-        setSessionValid(false);
-        setStep("settings");
+      .catch(() => {
+        setVapiSecrets(null);
+        setStep("done");
       });
-  }, [step, contactSessionId, validateContactSession, setLoadingMessage]);
+  }, [
+    step,
+    organizationId,
+    getVapiSecrets,
+    setVapiSecrets,
+    setStep,
+    setLoadingMessage,
+    setErrorMessage,
+    setScreen,
+  ]);
 
   useEffect(() => {
     if (step !== "done") {
