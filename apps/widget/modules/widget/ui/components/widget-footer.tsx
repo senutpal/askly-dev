@@ -4,7 +4,6 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { HomeIcon, InboxIcon } from "lucide-react";
 import { screenAtom } from "../../atoms/widget-atoms";
 
-
 export const WidgetFooter = () => {
   const screen = useAtomValue(screenAtom);
   const setScreen = useSetAtom(screenAtom);
