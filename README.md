@@ -444,7 +444,7 @@ export default function Layout({ children }) {
 
 # Architecture
 ## High-Level Overview
-![System Architechture](apps\web\public\image.png)
+![System Architechture](apps/web/public/image.png)
 ## Data Flow
 1. **User Interaction:** Student clicks embedded widget button
 2. **Widget Load:** iframe loads chat interface from widget app
