@@ -1,7 +1,6 @@
 "use client";
 
 import { OrganizationSwitcher } from "@clerk/nextjs";
-import { ModeToggle } from "@/components/mode-toggle";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { useQuery } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
@@ -64,7 +63,6 @@ export default function Page() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <ModeToggle />
             <OrganizationSwitcher hidePersonal={true} />
           </div>
         </header>
