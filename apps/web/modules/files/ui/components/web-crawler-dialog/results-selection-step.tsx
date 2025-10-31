@@ -19,19 +19,25 @@ type ResourceType = "text" | "image" | "pdf" | "all";
 
 interface Resource {
   _id: Id<"crawlResults">;
+  _creationTime: number;
+  jobId: Id<"crawlJobs">;
   url: string;
   type: "text" | "image" | "pdf";
   title: string;
   description?: string;
   size?: number;
+  contentHash: string;
+  selected: boolean;
   addedToKnowledgeBase: boolean;
+  sourceUrl: string;
+  error?: string;
 }
 
 interface ResultsSelectionStepProps {
   results: Resource[];
   selectedResourceIds: Set<string>;
   onToggleResource: (resourceId: string) => void;
-  onToggleSelectAll: () => void;
+  onToggleSelectAll: (filteredResults: Resource[]) => void;
   onSelectByType: (type: "text" | "image" | "pdf") => void;
 }
 
@@ -70,7 +76,6 @@ export const ResultsSelectionStep = ({
 
   return (
     <div className="space-y-4">
-      {/* Search and Filter Bar */}
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -97,25 +102,23 @@ export const ResultsSelectionStep = ({
         </Select>
       </div>
 
-      {/* Bulk Selection Actions */}
       <div className="flex items-center justify-between border-b pb-3">
         <p className="text-sm font-medium">
           Found {results.length} resource{results.length !== 1 && "s"}
           {searchQuery && ` (${filteredResults.length} matching)`}
         </p>
         <Button
-          variant="ghost"
-          size="sm"
-          onClick={onToggleSelectAll}
-          disabled={filteredResults.length === 0}
-        >
-          {selectedResourceIds.size === filteredResults.length
-            ? "Deselect All"
-            : "Select All"}
-        </Button>
+  variant="ghost"
+  size="sm"
+  onClick={() => onToggleSelectAll(filteredResults)}
+  disabled={filteredResults.length === 0}
+>
+  {filteredResults.every(r => selectedResourceIds.has(r._id))
+    ? "Deselect All"
+    : "Select All"}
+</Button>
       </div>
 
-      {/* Results List */}
       <ScrollArea className="h-[400px] rounded-lg border">
         <div className="space-y-2 p-4">
           {filteredResults.length === 0 ? (
@@ -141,7 +144,6 @@ export const ResultsSelectionStep = ({
         {selectedResourceIds.size} of {filteredResults.length} selected
       </p>
 
-      {/* Quick selection by type */}
       <div className="flex items-center gap-2 pt-2 border-t">
         <span className="text-sm text-muted-foreground">Quick select:</span>
         <Button

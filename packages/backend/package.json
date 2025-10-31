@@ -27,11 +27,9 @@
     "axios": "^1.13.1",
     "convex": "^1.26.2",
     "convex-helpers": "^0.1.104",
-    "crpyto-js": "0.0.1-security",
     "crypto-js": "^4.2.0",
     "linkedom": "^0.18.12",
     "robots-parser": "^3.0.1",
-    "robots-txt-parser": "^2.0.3",
     "zod": "^4.1.11"
   }
 }

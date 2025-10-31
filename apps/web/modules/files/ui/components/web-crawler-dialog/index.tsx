@@ -195,13 +195,26 @@ export const WebCrawlerDialog = ({
     setSelectedResourceIds(newSelected);
   };
 
-  const toggleSelectAll = () => {
-    if (!results) return;
+  const toggleSelectAll = (filteredResults: typeof results = []) => {
+    const filteredIds = new Set(filteredResults.map((r) => r._id));
+    const allFilteredSelected = filteredResults.every((r) =>
+      selectedResourceIds.has(r._id)
+    );
 
-    if (selectedResourceIds.size === results.length) {
-      setSelectedResourceIds(new Set());
+    if (allFilteredSelected) {
+      // Deselect all filtered items
+      setSelectedResourceIds((prev) => {
+        const newSet = new Set(prev);
+        filteredIds.forEach((id) => newSet.delete(id));
+        return newSet;
+      });
     } else {
-      setSelectedResourceIds(new Set(results.map((r) => r._id)));
+      // Select all filtered items
+      setSelectedResourceIds((prev) => {
+        const newSet = new Set(prev);
+        filteredIds.forEach((id) => newSet.add(id));
+        return newSet;
+      });
     }
   };
 
@@ -238,7 +251,7 @@ export const WebCrawlerDialog = ({
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange}  open={open}>
+    <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="min-w-2xl min-h-fit max-w-4xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

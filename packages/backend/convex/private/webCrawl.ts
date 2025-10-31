@@ -37,7 +37,7 @@ async function startCrawlHandler(
 ): Promise<{ jobId: Id<"crawlJobs"> }> {
   const identity = await ctx.auth.getUserIdentity();
   console.log(identity);
-  
+
   if (identity === null) {
     throw new ConvexError({
       code: "UNAUTHORIZED",
@@ -64,7 +64,6 @@ async function startCrawlHandler(
     jobId,
     args,
   });
-  
 
   return { jobId };
 }
@@ -244,6 +243,14 @@ export const addSelectedResources = action({
       });
     }
 
+    const job = await ctx.runQuery(internal.private.webCrawl.getJobDocument, {
+      jobId: args.jobId,
+    });
+
+    if (!job || job.organizationId !== orgId) {
+      throw new ConvexError({ code: "NOT_FOUND", message: "Job not found" });
+    }
+
     const results: Array<{
       resourceId: Id<"crawlResults">;
       success: boolean;
@@ -269,6 +276,15 @@ export const addSelectedResources = action({
           continue;
         }
 
+        if (resource.jobId !== args.jobId) {
+          results.push({
+            resourceId,
+            success: false,
+            error: "Resource does not belong to this job",
+          });
+          continue;
+        }
+        
         if (resource.addedToKnowledgeBase) {
           results.push({
             resourceId,
@@ -358,7 +374,6 @@ export const addSelectedResources = action({
     };
   },
 });
-
 
 export const createJob = internalMutation({
   args: {
@@ -464,6 +479,11 @@ export const getResource = internalQuery({
   },
 });
 
+export const getJobDocument = internalQuery({
+  args: { jobId: v.id("crawlJobs") },
+  handler: async (ctx, args) => ctx.db.get(args.jobId),
+});
+
 export const markAsAdded = internalMutation({
   args: { resourceId: v.id("crawlResults") },
   handler: async (ctx, args) => {
@@ -472,7 +492,6 @@ export const markAsAdded = internalMutation({
     });
   },
 });
-
 
 function extractTextFromPage(document: any, title: string): string {
   const body = document.body ?? document;
