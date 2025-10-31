@@ -1,12 +1,17 @@
 "use client";
+
+import { useState } from "react";
+import { usePaginatedQuery } from "convex/react";
+import { api } from "@workspace/backend/_generated/api";
+import type { PublicFile } from "@workspace/backend/private/files";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu";
-import { api } from "@workspace/backend/_generated/api";
-import { InfiniteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
+import { Button } from "@workspace/ui/components/button";
+import { Badge } from "@workspace/ui/components/badge";
 import {
   Table,
   TableBody,
@@ -15,21 +20,19 @@ import {
   TableHead,
   TableHeader,
 } from "@workspace/ui/components/table";
+import { InfiniteScrollTrigger } from "@workspace/ui/components/infinite-scroll-trigger";
 import { useInfiniteScroll } from "@workspace/ui/hooks/use-infinite-scroll";
-import { usePaginatedQuery } from "convex/react";
-import type { PublicFile } from "@workspace/backend/private/files";
-import { Button } from "@workspace/ui/components/button";
 import {
   FileIcon,
+  GlobeIcon,
   MoreHorizontalIcon,
   PlusIcon,
   TrashIcon,
 } from "lucide-react";
-import { Badge } from "@workspace/ui/components/badge";
-import { file } from "zod";
 import { UploadDialog } from "../components/upload-dialog";
-import { useState } from "react";
+import { WebCrawlerDialog } from "../components/web-crawler-dialog";
 import { DeleteFileDialog } from "../components/delete-file-dialog";
+
 export const FilesView = () => {
   const files = usePaginatedQuery(
     api.private.files.list,
@@ -52,6 +55,7 @@ export const FilesView = () => {
   });
 
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [crawlerDialogOpen, setCrawlerDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<PublicFile | null>(null);
 
@@ -64,6 +68,7 @@ export const FilesView = () => {
     setSelectedFile(null);
   };
 
+  
   return (
     <>
       <DeleteFileDialog
@@ -76,10 +81,14 @@ export const FilesView = () => {
         onOpenChange={setUploadDialogOpen}
         open={uploadDialogOpen}
       />
-      <div className="flex min-h-screen flex-col bg-muted p-8 ">
+      <WebCrawlerDialog
+        onOpenChange={setCrawlerDialogOpen}
+        open={crawlerDialogOpen}
+      />
+      <div className="flex min-h-screen flex-col bg-muted p-8">
         <div className="mx-auto w-full max-w-screen-md">
           <div className="space-y-2">
-            <h1 className="text-2xl md:text-4xl font-semibold ">
+            <h1 className="text-2xl md:text-4xl font-semibold">
               Knowledge Base
             </h1>
             <p className="text-muted-foreground font-medium">
@@ -87,9 +96,16 @@ export const FilesView = () => {
             </p>
           </div>
           <div className="mt-8 rounded-lg border bg-background">
-            <div className="flex items-center justify-end border-b px-4 py-4">
+            <div className="flex items-center justify-end gap-2 border-b px-4 py-4">
+              <Button
+                variant="outline"
+                onClick={() => setCrawlerDialogOpen(true)}
+              >
+                <GlobeIcon className="size-4 mr-2" />
+                Crawl Website
+              </Button>
               <Button onClick={() => setUploadDialogOpen(true)}>
-                <PlusIcon />
+                <PlusIcon className="size-4 mr-2" />
                 Add New
               </Button>
             </div>
@@ -126,26 +142,22 @@ export const FilesView = () => {
                   }
 
                   return files.results.map((file) => (
-                    <TableRow
-                      className="hover:bg-muted/50
-                   "
-                      key={file.id}
-                    >
-                      <TableCell className="px-6 py-4 font-semibold ">
+                    <TableRow className="hover:bg-muted/50" key={file.id}>
+                      <TableCell className="px-6 py-4 font-semibold">
                         <div className="flex items-center gap-3">
-                          <FileIcon />
+                          <FileIcon className="size-4" />
                           {file.name}
                         </div>
                       </TableCell>
-                      <TableCell className="px-6 py-4 ">
+                      <TableCell className="px-6 py-4">
                         <Badge className="uppercase" variant="outline">
                           {file.type}
                         </Badge>
                       </TableCell>
-                      <TableCell className="px-6 py-4  text-muted-foreground">
+                      <TableCell className="px-6 py-4 text-muted-foreground">
                         {file.size}
                       </TableCell>
-                      <TableCell className="px-6 py-4 ">
+                      <TableCell className="px-6 py-4">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
@@ -153,7 +165,7 @@ export const FilesView = () => {
                               size="sm"
                               variant="ghost"
                             >
-                              <MoreHorizontalIcon />
+                              <MoreHorizontalIcon className="size-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
