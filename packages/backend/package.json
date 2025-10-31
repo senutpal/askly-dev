@@ -11,6 +11,7 @@
     "./convex": "./convex/*.ts"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20.19.9",
     "@workspace/typescript-config": "workspace:*",
     "depcheck": "^1.4.7",
@@ -23,8 +24,14 @@
     "@convex-dev/rag": "^0.5.3",
     "@vapi-ai/server-sdk": "^0.10.2",
     "ai": "^5.0.60",
+    "axios": "^1.13.1",
     "convex": "^1.26.2",
     "convex-helpers": "^0.1.104",
+    "crpyto-js": "0.0.1-security",
+    "crypto-js": "^4.2.0",
+    "linkedom": "^0.18.12",
+    "robots-parser": "^3.0.1",
+    "robots-txt-parser": "^2.0.3",
     "zod": "^4.1.11"
   }
 }

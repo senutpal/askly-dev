@@ -9,6 +9,7 @@
  */
 
 import type * as lib_extractTextContent from "../lib/extractTextContent.js";
+import type * as lib_webCrawler from "../lib/webCrawler.js";
 import type * as private_contactSessions from "../private/contactSessions.js";
 import type * as private_conversations from "../private/conversations.js";
 import type * as private_files from "../private/files.js";
@@ -16,6 +17,7 @@ import type * as private_messages from "../private/messages.js";
 import type * as private_plugins from "../private/plugins.js";
 import type * as private_secrets from "../private/secrets.js";
 import type * as private_vapi from "../private/vapi.js";
+import type * as private_webCrawl from "../private/webCrawl.js";
 import type * as private_widgetSettings from "../private/widgetSettings.js";
 import type * as public_contactSessions from "../public/contactSessions.js";
 import type * as public_conversations from "../public/conversations.js";
@@ -51,6 +53,7 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   "lib/extractTextContent": typeof lib_extractTextContent;
+  "lib/webCrawler": typeof lib_webCrawler;
   "private/contactSessions": typeof private_contactSessions;
   "private/conversations": typeof private_conversations;
   "private/files": typeof private_files;
@@ -58,6 +61,7 @@ declare const fullApi: ApiFromModules<{
   "private/plugins": typeof private_plugins;
   "private/secrets": typeof private_secrets;
   "private/vapi": typeof private_vapi;
+  "private/webCrawl": typeof private_webCrawl;
   "private/widgetSettings": typeof private_widgetSettings;
   "public/contactSessions": typeof public_contactSessions;
   "public/conversations": typeof public_conversations;
